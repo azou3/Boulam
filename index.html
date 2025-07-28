@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogItiq2KfYsdiqINi52YXYp9ix2Kgg2KjYt9mE2YjZhtmIINi52YXYp9ix2Kgg2KjYp9mE2LPZhtmGINmE2YTYp9mE2LTYsdmFIiwKICAic2hvcnRfbmFtZSI6ICLYqNin2YTYs9mG2YgiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL3BsYWNlaG9sZC5jby8xOTJ4MTkyLzhmNTMxOS9mZmVlODA/dGV4dD0lRjAlOUYlOUIlODgiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9wbGFjZWhvbGQuY28vNTEyeDUxMi84ZjUzMTkvZmZlZTgwP3RleHQ9JUZMCU5GJTk5JTg4IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXSwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJ0aGVtZV9jb2xvciI6ICIjMWEwNTA1IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMWEwNTA1Igp9">
+
     <style>
         .digital-font { font-family: 'Orbitron', sans-serif; font-weight: 700; }
         .arabic-font { font-family: 'Cairo', sans-serif; font-weight: 700; }
@@ -58,6 +61,9 @@
     <!-- Settings Icon -->
     <div id="settings-icon" class="fixed bottom-4 right-4 cursor-pointer z-30"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffee80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
 
+    <!-- Install App Panel -->
+    <div id="install-panel" class="modal-overlay hidden"><div class="modal-panel w-full max-w-sm p-6 rounded-lg shadow-lg text-white text-center"><h2 class="text-2xl arabic-font red-glow mb-4">تثبيت التطبيق</h2><p class="mb-6">للوصول السريع، قم بتثبيت التطبيق على شاشتك الرئيسية.</p><button id="install-btn" class="btn w-full py-2 px-4 rounded mb-3">تثبيت الآن</button><button id="install-later-btn" class="text-gray-400 hover:text-white">ليس الآن</button></div></div>
+
     <!-- First Time Setup Panel -->
     <div id="setup-panel" class="modal-overlay hidden"><div class="modal-panel w-full max-w-sm p-6 rounded-lg shadow-lg text-white text-center"><h2 class="text-2xl arabic-font red-glow mb-4">إعداد لأول مرة</h2><p class="mb-6">للحصول على أفضل تجربة، يرجى السماح بالإشعارات والموقع الجغرافي.</p><button id="enable-notifications-btn" class="btn w-full py-2 px-4 rounded mb-3">تفعيل الإشعارات والأذان</button><button id="setup-later-btn" class="text-gray-400 hover:text-white">الإعداد لاحقاً</button></div></div>
     
@@ -74,7 +80,7 @@
 
     <script>
     const dom = {
-        currentTime: document.getElementById('current-time'), gregorianDate: document.getElementById('gregorian-date'), hijriDate: document.getElementById('hijri-date'), allDigitalElements: document.querySelectorAll('.digital-font'), statusMessage: document.getElementById('status-message'), prayerTimesContainer: document.getElementById('prayer-times-container'), locationName: document.getElementById('location-name'), settingsIcon: document.getElementById('settings-icon'), loginPanel: document.getElementById('login-panel'), settingsPanel: document.getElementById('settings-panel'), loginForm: document.getElementById('login-form'), loginError: document.getElementById('login-error'), closeLoginBtn: document.getElementById('close-login'), closeSettingsBtn: document.getElementById('close-settings'), citySelect: document.getElementById('city-select'), methodSelect: document.getElementById('method-select'), saveSettingsBtn: document.getElementById('save-settings'), gpsBtn: document.getElementById('gps-btn'), gpsStatus: document.getElementById('gps-status'), preNotificationTime: document.getElementById('pre-notification-time'), adhanFileInput: document.getElementById('adhan-file-input'), adhanFileName: document.getElementById('adhan-file-name'), adhanPlayer: document.getElementById('adhan-player'), setupPanel: document.getElementById('setup-panel'), enableNotificationsBtn: document.getElementById('enable-notifications-btn'), setupLaterBtn: document.getElementById('setup-later-btn'), adhanPanel: document.getElementById('adhan-panel'), adhanTitle: document.getElementById('adhan-title'), closeAdhanBtn: document.getElementById('close-adhan-btn')
+        currentTime: document.getElementById('current-time'), gregorianDate: document.getElementById('gregorian-date'), hijriDate: document.getElementById('hijri-date'), allDigitalElements: document.querySelectorAll('.digital-font'), statusMessage: document.getElementById('status-message'), prayerTimesContainer: document.getElementById('prayer-times-container'), locationName: document.getElementById('location-name'), settingsIcon: document.getElementById('settings-icon'), loginPanel: document.getElementById('login-panel'), settingsPanel: document.getElementById('settings-panel'), loginForm: document.getElementById('login-form'), loginError: document.getElementById('login-error'), closeLoginBtn: document.getElementById('close-login'), closeSettingsBtn: document.getElementById('close-settings'), citySelect: document.getElementById('city-select'), methodSelect: document.getElementById('method-select'), saveSettingsBtn: document.getElementById('save-settings'), gpsBtn: document.getElementById('gps-btn'), gpsStatus: document.getElementById('gps-status'), preNotificationTime: document.getElementById('pre-notification-time'), adhanFileInput: document.getElementById('adhan-file-input'), adhanFileName: document.getElementById('adhan-file-name'), adhanPlayer: document.getElementById('adhan-player'), setupPanel: document.getElementById('setup-panel'), enableNotificationsBtn: document.getElementById('enable-notifications-btn'), setupLaterBtn: document.getElementById('setup-later-btn'), adhanPanel: document.getElementById('adhan-panel'), adhanTitle: document.getElementById('adhan-title'), closeAdhanBtn: document.getElementById('close-adhan-btn'), installPanel: document.getElementById('install-panel'), installBtn: document.getElementById('install-btn'), installLaterBtn: document.getElementById('install-later-btn')
     };
     const algerianWilayas = ["Adrar","Chlef","Laghouat","Oum El Bouaghi","Batna","Béjaïa","Biskra","Béchar","Blida","Bouira","Tamanrasset","Tébessa","Tlemcen","Tiaret","Tizi Ouzou","Algiers","Djelfa","Jijel","Sétif","Saïda","Skikda","Sidi Bel Abbès","Annaba","Guelma","Constantine","Médéa","Mostaganem","M'Sila","Mascara","Ouargla","Oran","El Bayadh","Illizi","Bordj Bou Arréridj","Boumerdès","El Tarf","Tindouf","Tissemsilt","El Oued","Khenchela","Souk Ahras","Tipaza","Mila","Aïn Defla","Naâma","Aïn Témouchent","Ghardaïa","Relizane","Timimoun","Bordj Badji Mokhtar","Ouled Djellal","Béni Abbès","In Salah","In Guezzam","Touggourt","Djanet","El M'Ghair","El Meniaa"];
     const calculationMethods = [{ id: 3, name: 'رابطة العالم الإسلامي (MWL)' }, { id: 5, name: 'الهيئة المصرية العامة للمساحة' }, { id: 8, name: 'وزارة الشؤون الدينية الجزائرية' }, { id: 4, name: 'أم القرى، مكة المكرمة' }, { id: 2, name: 'المجتمع الإسلامي لأمريكا الشمالية (ISNA)'}];
@@ -82,14 +88,16 @@
     let prayerTimesData = {};
     let currentSettings = { city: 'Algiers', color: 'yellow-glow', method: 3, preNotificationMins: 10 };
     let notificationInterval;
+    let deferredPrompt;
 
     async function fetchPrayerTimes(settings) {
         dom.statusMessage.textContent = `جاري تحميل المواقيت...`;
         dom.statusMessage.classList.remove('hidden');
         dom.prayerTimesContainer.classList.add('hidden');
         let apiUrl;
+        // FIX: Corrected the API endpoint for fetching by coordinates.
         if (settings.lat && settings.lon) {
-            apiUrl = `https://api.aladhan.com/v1/timings/${new Date().getTime()}?latitude=${settings.lat}&longitude=${settings.lon}&method=${settings.method}`;
+            apiUrl = `https://api.aladhan.com/v1/timings?latitude=${settings.lat}&longitude=${settings.lon}&method=${settings.method}`;
         } else {
             apiUrl = `https://api.aladhan.com/v1/timingsByCity?city=${settings.city}&country=Algeria&method=${settings.method}`;
         }
@@ -319,6 +327,27 @@
         dom.adhanPanel.classList.add('hidden');
         dom.adhanPlayer.pause();
         dom.adhanPlayer.currentTime = 0;
+    });
+
+    // PWA Install Prompt Logic
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        dom.installPanel.classList.remove('hidden');
+    });
+
+    dom.installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            deferredPrompt = null;
+            dom.installPanel.classList.add('hidden');
+        }
+    });
+
+    dom.installLaterBtn.addEventListener('click', () => {
+        dom.installPanel.classList.add('hidden');
     });
 
     document.addEventListener('DOMContentLoaded', () => {
