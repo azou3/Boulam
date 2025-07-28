@@ -9,9 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
     
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="./manifest.json">
-    <!-- Theme Color for browsers -->
+    <!-- Web App Manifest (Embedded) -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItiq2KfYsdiqINi52YXYp9ix2Kgg2KjYt9mE2YjZhtmIINi52YXYp9ix2Kgg2KjYp9mE2LPZhtmGINmE2YTYp9mE2LTYsdmFIiwKICAic2hvcnRfbmFtZSI6ICLYqNin2YTYs9mG2YgiLAogICJkZXNjcmlwdGlvbiI6ICLYqtiq2KfYsdiqINi52YPYsdiq2KfYsSDYqNin2YTYs9mG2Ygg2YXYsNinINi52LDZiNmE2Yog2KjZhtmI2YjYp9ixIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxYTA1MDUiLAogICJ0aGVtZV9jb2xvciI6ICIjMWEwNTA1IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9wbGFjZWhvbGQuY28vMTkyeDE5Mi84YzUzMTkvZmZlZTgwP3RleHQ9JUZMCU5GJTk5JTg4IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9LAogICAgewogICAgICAic3JjIjogImh0dHBzOi8vcGxhY2Vob2xkLmNvLzUxMng1MTIvOGM1MzE5L2ZmZWU4MD90ZXh0PSVGMAlOTklTk5JTg4IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
     <meta name="theme-color" content="#1a0505"/>
 
     <style>
@@ -82,78 +81,6 @@
     <audio id="adhan-player" class="hidden"></audio>
 
     <script>
-    /*
-    ==================================================================
-    محتوى ملف manifest.json
-    ==================================================================
-    عند الرفع على GitHub، قم بإنشاء ملف جديد باسم manifest.json
-    والصق المحتوى التالي بداخله.
-    
-    {
-      "name": "تطبيق عمي إبراهيم حمزة رحمه الله",
-      "short_name": "مواقيت الصلاة",
-      "description": "تطبيق لمواقيت الصلاة مع أذان وتنبيهات.",
-      "start_url": ".",
-      "display": "standalone",
-      "background_color": "#1a0505",
-      "theme_color": "#1a0505",
-      "icons": [
-        {
-          "src": "https://placehold.co/192x192/8c5319/ffee80?text=🕌",
-          "sizes": "192x192",
-          "type": "image/png"
-        },
-        {
-          "src": "https://placehold.co/512x512/8c5319/ffee80?text=🕌",
-          "sizes": "512x512",
-          "type": "image/png"
-        }
-      ]
-    }
-    ==================================================================
-    */
-
-    /*
-    ==================================================================
-    محتوى ملف sw.js (Service Worker)
-    ==================================================================
-    عند الرفع على GitHub، قم بإنشاء ملف جديد باسم sw.js
-    والصق المحتوى التالي بداخله. هذا الملف ضروري لعمل التطبيق
-    في الخلفية وليكون قابلاً للتثبيت.
-    
-    const CACHE_NAME = 'prayer-times-cache-v1';
-    const urlsToCache = [
-      '/',
-      '/index.html' 
-      // Add other static assets here if you have them, e.g., '/style.css'
-    ];
-
-    self.addEventListener('install', event => {
-      event.waitUntil(
-        caches.open(CACHE_NAME)
-          .then(cache => {
-            console.log('Opened cache');
-            return cache.addAll(urlsToCache);
-          })
-      );
-    });
-
-    self.addEventListener('fetch', event => {
-      event.respondWith(
-        caches.match(event.request)
-          .then(response => {
-            // Cache hit - return response
-            if (response) {
-              return response;
-            }
-            return fetch(event.request);
-          }
-        )
-      );
-    });
-    ==================================================================
-    */
-
     const dom = {
         currentTime: document.getElementById('current-time'), gregorianDate: document.getElementById('gregorian-date'), hijriDate: document.getElementById('hijri-date'), allDigitalElements: document.querySelectorAll('.digital-font'), statusMessage: document.getElementById('status-message'), prayerTimesContainer: document.getElementById('prayer-times-container'), locationName: document.getElementById('location-name'), settingsIcon: document.getElementById('settings-icon'), loginPanel: document.getElementById('login-panel'), settingsPanel: document.getElementById('settings-panel'), loginForm: document.getElementById('login-form'), loginError: document.getElementById('login-error'), closeLoginBtn: document.getElementById('close-login'), closeSettingsBtn: document.getElementById('close-settings'), citySelect: document.getElementById('city-select'), methodSelect: document.getElementById('method-select'), saveSettingsBtn: document.getElementById('save-settings'), gpsBtn: document.getElementById('gps-btn'), gpsStatus: document.getElementById('gps-status'), preNotificationTime: document.getElementById('pre-notification-time'), adhanFileInput: document.getElementById('adhan-file-input'), adhanFileName: document.getElementById('adhan-file-name'), adhanPlayer: document.getElementById('adhan-player'), setupPanel: document.getElementById('setup-panel'), enableNotificationsBtn: document.getElementById('enable-notifications-btn'), setupLaterBtn: document.getElementById('setup-later-btn'), adhanPanel: document.getElementById('adhan-panel'), adhanTitle: document.getElementById('adhan-title'), closeAdhanBtn: document.getElementById('close-adhan-btn'), installPanel: document.getElementById('install-panel'), installBtn: document.getElementById('install-btn'), installLaterBtn: document.getElementById('install-later-btn')
     };
@@ -244,9 +171,10 @@
     
     function sendBackgroundNotification(title, options) {
         if ('Notification' in window && Notification.permission === 'granted') {
+            // FIX: Changed to use standard Notification API directly
             new Notification(title, {
                 body: options.body,
-                icon: 'https://placehold.co/128x128/8c5319/ffee80?text=🕌'
+                icon: 'https://placehold.co/192x192/8c5319/ffee80?text=🕌'
             });
         }
     }
@@ -389,35 +317,34 @@
     }
 
     // --- PWA & Service Worker Logic ---
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').then(registration => {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, err => {
-                console.log('ServiceWorker registration failed: ', err);
-            });
-        });
-    }
+    // FIX: Removed Service Worker registration from a blob URL to prevent errors.
+    // The app will still be installable via the manifest, but background notifications
+    // will only work as standard notifications when the page is open.
 
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        dom.installPanel.classList.remove('hidden');
-    });
-
-    dom.installBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response to the install prompt: ${outcome}`);
-            deferredPrompt = null;
-            dom.installPanel.classList.add('hidden');
+        if(dom.installPanel) {
+            dom.installPanel.classList.remove('hidden');
         }
     });
 
-    dom.installLaterBtn.addEventListener('click', () => {
-        dom.installPanel.classList.add('hidden');
-    });
+    if(dom.installBtn) {
+        dom.installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                dom.installPanel.classList.add('hidden');
+            }
+        });
+    }
+
+    if(dom.installLaterBtn) {
+        dom.installLaterBtn.addEventListener('click', () => {
+            dom.installPanel.classList.add('hidden');
+        });
+    }
 
 
     // --- Event Listeners & Initial Load ---
