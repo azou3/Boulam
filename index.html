@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مؤقتة الصلاة الرقمية</title>
+    <title>تطبيق عمي إبراهيم حمزة رحمه الله</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +34,7 @@
     <!-- Main Clock -->
     <div class="clock-container max-w-sm w-full mx-auto rounded-2xl">
         <div class="clock-content p-4">
-            <h1 class="arabic-font text-4xl text-center mb-2 red-glow">البشير الإسلامية</h1>
+            <h1 class="arabic-font text-2xl text-center mb-2 red-glow">تطبيق عمي إبراهيم حمزة رحمه الله</h1>
             <p id="location-name" class="arabic-font text-sm text-center text-amber-300 mb-4">جاري تحميل الإعدادات...</p>
             <div class="digital-font text-center text-5xl mb-3" id="current-time">--:--:--</div>
             <div class="digital-font text-center text-xl mb-1" id="gregorian-date">----.--.--</div>
@@ -64,19 +64,21 @@
     <!-- Login Panel -->
     <div id="login-panel" class="modal-overlay hidden"><div class="modal-panel w-full max-w-sm p-6 rounded-lg shadow-lg"><h2 class="text-2xl text-center arabic-font red-glow mb-4">تسجيل الدخول</h2><form id="login-form"><input type="text" id="username" class="form-input w-full p-2 rounded mb-4" placeholder="اسم المستخدم"><input type="password" id="password" class="form-input w-full p-2 rounded mb-6" placeholder="كلمة المرور"><p id="login-error" class="text-red-500 text-center mb-4 hidden">بيانات الدخول غير صحيحة.</p><div class="flex items-center justify-between"><button type="submit" class="btn w-full py-2 px-4 rounded">دخول</button><button type="button" id="close-login" class="text-gray-400 hover:text-white ml-4">إغلاق</button></div></form></div></div>
     
+    <!-- Adhan Notification Panel -->
+    <div id="adhan-panel" class="modal-overlay hidden"><div class="modal-panel w-full max-w-md p-8 rounded-lg shadow-lg text-white text-center"><h2 id="adhan-title" class="text-4xl arabic-font yellow-glow mb-6">حان الآن وقت صلاة...</h2><button id="close-adhan-btn" class="btn w-1/2 py-2 px-4 rounded">إغلاق</button></div></div>
+
     <!-- Settings Panel -->
     <div id="settings-panel" class="modal-overlay hidden"><div class="modal-panel w-full max-w-sm p-6 rounded-lg shadow-lg"><h2 class="text-2xl text-center arabic-font red-glow mb-6">لوحة التحكم</h2><div class="mb-4"><label class="block text-amber-300 mb-2 arabic-font">تحديد الموقع</label><div class="flex space-x-2 rtl:space-x-reverse"><select id="city-select" class="form-select w-full p-2 rounded"></select><button id="gps-btn" class="btn btn-secondary p-2 rounded" title="تحديد الموقع آلياً"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></button></div><p id="gps-status" class="text-xs text-center text-gray-400 mt-2"></p></div><div class="mb-4"><label for="method-select" class="block text-amber-300 mb-2 arabic-font">طريقة الحساب</label><select id="method-select" class="form-select w-full p-2 rounded"></select></div><div class="mb-4"><label for="pre-notification-time" class="block text-amber-300 mb-2 arabic-font">تنبيه قبل الأذان بـ (دقائق)</label><input type="number" id="pre-notification-time" class="form-input w-full p-2 rounded" min="0" max="60"></div><div class="mb-4"><label class="block text-amber-300 mb-2 arabic-font">صوت الأذان</label><input type="file" id="adhan-file-input" class="text-white w-full" accept="audio/*"><p id="adhan-file-name" class="text-xs text-gray-400 mt-1"></p></div><div class="mb-6"><label class="block text-amber-300 mb-2 arabic-font">لون الأرقام</label><div class="flex justify-around"><label class="flex items-center"><input type="radio" name="color" value="yellow-glow" class="ml-2"> <span class="yellow-glow">أصفر</span></label><label class="flex items-center"><input type="radio" name="color" value="red-glow" class="ml-2"> <span class="red-glow">أحمر</span></label><label class="flex items-center"><input type="radio" name="color" value="green-glow" class="ml-2"> <span class="green-glow">أخضر</span></label></div></div><div class="flex items-center justify-between"><button id="save-settings" class="btn py-2 px-4 rounded">حفظ وإغلاق</button><button id="close-settings" class="text-gray-400 hover:text-white">إلغاء</button></div></div></div>
     
     <audio id="adhan-player" class="hidden"></audio>
 
     <script>
-    // --- Main Application Logic ---
     const dom = {
-        // ... (all DOM elements)
-        currentTime: document.getElementById('current-time'), gregorianDate: document.getElementById('gregorian-date'), hijriDate: document.getElementById('hijri-date'), allDigitalElements: document.querySelectorAll('.digital-font'), statusMessage: document.getElementById('status-message'), prayerTimesContainer: document.getElementById('prayer-times-container'), locationName: document.getElementById('location-name'), settingsIcon: document.getElementById('settings-icon'), loginPanel: document.getElementById('login-panel'), settingsPanel: document.getElementById('settings-panel'), loginForm: document.getElementById('login-form'), loginError: document.getElementById('login-error'), closeLoginBtn: document.getElementById('close-login'), closeSettingsBtn: document.getElementById('close-settings'), citySelect: document.getElementById('city-select'), methodSelect: document.getElementById('method-select'), saveSettingsBtn: document.getElementById('save-settings'), gpsBtn: document.getElementById('gps-btn'), gpsStatus: document.getElementById('gps-status'), preNotificationTime: document.getElementById('pre-notification-time'), adhanFileInput: document.getElementById('adhan-file-input'), adhanFileName: document.getElementById('adhan-file-name'), adhanPlayer: document.getElementById('adhan-player'), setupPanel: document.getElementById('setup-panel'), enableNotificationsBtn: document.getElementById('enable-notifications-btn'), setupLaterBtn: document.getElementById('setup-later-btn')
+        currentTime: document.getElementById('current-time'), gregorianDate: document.getElementById('gregorian-date'), hijriDate: document.getElementById('hijri-date'), allDigitalElements: document.querySelectorAll('.digital-font'), statusMessage: document.getElementById('status-message'), prayerTimesContainer: document.getElementById('prayer-times-container'), locationName: document.getElementById('location-name'), settingsIcon: document.getElementById('settings-icon'), loginPanel: document.getElementById('login-panel'), settingsPanel: document.getElementById('settings-panel'), loginForm: document.getElementById('login-form'), loginError: document.getElementById('login-error'), closeLoginBtn: document.getElementById('close-login'), closeSettingsBtn: document.getElementById('close-settings'), citySelect: document.getElementById('city-select'), methodSelect: document.getElementById('method-select'), saveSettingsBtn: document.getElementById('save-settings'), gpsBtn: document.getElementById('gps-btn'), gpsStatus: document.getElementById('gps-status'), preNotificationTime: document.getElementById('pre-notification-time'), adhanFileInput: document.getElementById('adhan-file-input'), adhanFileName: document.getElementById('adhan-file-name'), adhanPlayer: document.getElementById('adhan-player'), setupPanel: document.getElementById('setup-panel'), enableNotificationsBtn: document.getElementById('enable-notifications-btn'), setupLaterBtn: document.getElementById('setup-later-btn'), adhanPanel: document.getElementById('adhan-panel'), adhanTitle: document.getElementById('adhan-title'), closeAdhanBtn: document.getElementById('close-adhan-btn')
     };
     const algerianWilayas = ["Adrar","Chlef","Laghouat","Oum El Bouaghi","Batna","Béjaïa","Biskra","Béchar","Blida","Bouira","Tamanrasset","Tébessa","Tlemcen","Tiaret","Tizi Ouzou","Algiers","Djelfa","Jijel","Sétif","Saïda","Skikda","Sidi Bel Abbès","Annaba","Guelma","Constantine","Médéa","Mostaganem","M'Sila","Mascara","Ouargla","Oran","El Bayadh","Illizi","Bordj Bou Arréridj","Boumerdès","El Tarf","Tindouf","Tissemsilt","El Oued","Khenchela","Souk Ahras","Tipaza","Mila","Aïn Defla","Naâma","Aïn Témouchent","Ghardaïa","Relizane","Timimoun","Bordj Badji Mokhtar","Ouled Djellal","Béni Abbès","In Salah","In Guezzam","Touggourt","Djanet","El M'Ghair","El Meniaa"];
     const calculationMethods = [{ id: 3, name: 'رابطة العالم الإسلامي (MWL)' }, { id: 5, name: 'الهيئة المصرية العامة للمساحة' }, { id: 8, name: 'وزارة الشؤون الدينية الجزائرية' }, { id: 4, name: 'أم القرى، مكة المكرمة' }, { id: 2, name: 'المجتمع الإسلامي لأمريكا الشمالية (ISNA)'}];
+    const prayerNameMapping = { Fajr: 'الفجر', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء' };
     let prayerTimesData = {};
     let currentSettings = { city: 'Algiers', color: 'yellow-glow', method: 3, preNotificationMins: 10 };
     let notificationInterval;
@@ -124,12 +126,12 @@
         const prayerSchedule = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].map(p => ({name: p, time: prayerTimesData[p]}));
         let nextPrayer = prayerSchedule.find(p => (parseInt(p.time.split(':')[0]) * 60 + parseInt(p.time.split(':')[1])) > currentTime);
         if (!nextPrayer) nextPrayer = prayerSchedule[0];
-        document.getElementById('upcoming-prayer-name').textContent = nextPrayer.name;
+        document.getElementById('upcoming-prayer-name').textContent = prayerNameMapping[nextPrayer.name];
         document.getElementById('upcoming-prayer-time').textContent = nextPrayer.time;
     }
     
     function checkAndNotify() {
-        if (Object.keys(prayerTimesData).length === 0 || Notification.permission !== 'granted') return;
+        if (Object.keys(prayerTimesData).length === 0) return;
         const now = new Date();
         const todayStr = now.toISOString().split('T')[0];
         const prayerSchedule = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
@@ -148,34 +150,38 @@
 
             // Pre-Adhan Notification
             if (timeDiffMins === currentSettings.preNotificationMins && !localStorage.getItem(preNotifKey)) {
-                sendNotification(`صلاة ${prayerName} بعد ${currentSettings.preNotificationMins} دقائق`, { body: `استعد للصلاة`, icon: './icon.png', sound: false });
+                sendBackgroundNotification(`صلاة ${prayerNameMapping[prayerName]} بعد ${currentSettings.preNotificationMins} دقائق`, { body: `استعد للصلاة` });
                 localStorage.setItem(preNotifKey, 'true');
             }
 
             // Adhan Notification
             if (timeDiffMins === 0 && !localStorage.getItem(adhanNotifKey)) {
-                sendNotification(`حان الآن وقت أذان ${prayerName}`, { body: `حي على الصلاة`, icon: './icon.png', sound: true });
+                showAdhanScreen(prayerNameMapping[prayerName]);
                 localStorage.setItem(adhanNotifKey, 'true');
             }
         });
     }
     
-    function sendNotification(title, options) {
-        // Use the standard Notification API.
-        // This works when the page is active or in the background (browser open).
+    function sendBackgroundNotification(title, options) {
         if (Notification.permission === 'granted') {
-            const notification = new Notification(title, {
+            new Notification(title, {
                 body: options.body,
-                icon: './icon.png' // You can host an icon and provide its URL here
+                icon: 'https://placehold.co/128x128/8c5319/ffee80?text=🕌'
             });
         }
+    }
 
-        if (options.sound) {
-            const adhanSound = localStorage.getItem('adhanSound');
-            if (adhanSound) {
-                dom.adhanPlayer.src = adhanSound;
-                dom.adhanPlayer.play().catch(e => console.error("Audio play failed:", e));
-            }
+    function showAdhanScreen(prayerName) {
+        dom.adhanTitle.textContent = `حان الآن وقت صلاة ${prayerName}`;
+        dom.adhanPanel.classList.remove('hidden');
+        
+        const adhanSound = localStorage.getItem('adhanSound');
+        if (adhanSound) {
+            dom.adhanPlayer.src = adhanSound;
+            dom.adhanPlayer.play().catch(e => {
+                console.error("Audio play failed:", e);
+                alert("لم يتمكن المتصفح من تشغيل الأذان تلقائياً. يرجى التفاعل مع الصفحة أولاً.");
+            });
         }
     }
 
@@ -257,7 +263,7 @@
                 currentSettings.lat = position.coords.latitude;
                 currentSettings.lon = position.coords.longitude;
                 delete currentSettings.city;
-                saveSettings(); // Save and close immediately
+                saveSettings();
             },
             (error) => {
                 let message = 'حدث خطأ.';
@@ -295,14 +301,13 @@
                     localStorage.setItem('setupComplete', 'true');
                     dom.setupPanel.classList.add('hidden');
                 } else {
-                    alert('لم يتم منح إذن الإشعارات. لا يمكن إرسال الأذان.');
+                    alert('لم يتم منح إذن الإشعارات. لا يمكن إرسال التنبيهات.');
                 }
             });
         };
         dom.setupLaterBtn.onclick = () => dom.setupPanel.classList.add('hidden');
     }
 
-    // --- Event Listeners & Initial Load ---
     dom.settingsIcon.addEventListener('click', () => dom.loginPanel.classList.remove('hidden'));
     dom.closeLoginBtn.addEventListener('click', () => dom.loginPanel.classList.add('hidden'));
     dom.loginForm.addEventListener('submit', handleLogin);
@@ -310,6 +315,11 @@
     dom.closeSettingsBtn.addEventListener('click', () => dom.settingsPanel.classList.add('hidden'));
     dom.gpsBtn.addEventListener('click', handleGpsRequest);
     dom.adhanFileInput.addEventListener('change', handleAdhanFileSelect);
+    dom.closeAdhanBtn.addEventListener('click', () => {
+        dom.adhanPanel.classList.add('hidden');
+        dom.adhanPlayer.pause();
+        dom.adhanPlayer.currentTime = 0;
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
         handleFirstTimeSetup();
@@ -317,7 +327,7 @@
         loadSettings();
         setInterval(updateClock, 1000);
         if (!notificationInterval) {
-            notificationInterval = setInterval(checkAndNotify, 30000); // Check every 30 seconds
+            notificationInterval = setInterval(checkAndNotify, 30000);
         }
     });
     </script>
