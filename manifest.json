@@ -1,0 +1,26 @@
+{
+  "name": "تطبيق نواري للأذان والقبلة",
+  "short_name": "نواري",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a0505",
+  "theme_color": "#1a0505",
+  "description": "تطبيق مواقيت الصلاة واتجاه القبلة صدقة عن المرحوم إبراهيم حمزة",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/dKqg2r4/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.ibb.co/6Y4qJ1T/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "permissions": [
+    "geolocation",
+    "notifications"
+  ],
+  "orientation": "portrait"
+}
