@@ -1,26 +1,23 @@
 {
-  "name": "تطبيق نواري للأذان والقبلة",
-  "short_name": "نواري",
-  "start_url": "/",
+  "name": "تطبيق عمي إبراهيم حمزة رحمه الله",
+  "short_name": "مواقيت الصلاة",
+  "description": "تطبيق لمواقيت الصلاة مع أذان وتنبيهات.",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#1a0505",
   "theme_color": "#1a0505",
-  "description": "تطبيق مواقيت الصلاة واتجاه القبلة صدقة عن المرحوم إبراهيم حمزة",
   "icons": [
     {
-      "src": "https://i.ibb.co/dKqg2r4/icon-192.png",
+      "src": "https://placehold.co/192x192/8c5319/ffee80?text=🕌",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://i.ibb.co/6Y4qJ1T/icon-512.png",
+      "src": "https://placehold.co/512x512/8c5319/ffee80?text=🕌",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ],
-  "permissions": [
-    "geolocation",
-    "notifications"
-  ],
-  "orientation": "portrait"
+  ]
 }
