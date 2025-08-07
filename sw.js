@@ -1,38 +1,75 @@
-const CACHE_NAME = 'nouari-v1';
-const ASSETS = [
-  '/',
-  '/index.html',
-  'https://i.ibb.co/dKqg2r4/icon-192.png',
-  'https://i.ibb.co/6Y4qJ1T/icon-512.png',
-  'https://i.ibb.co/4WQ0k8P/compass-base.png',
-  'https://i.ibb.co/2K2x6v3/compass-needle.png',
-  'https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=Orbitron:wght@400..900&display=swap',
-  'https://cdn.tailwindcss.com'
+// This is the service worker file.
+
+const CACHE_NAME = 'prayer-times-cache-v2'; // Updated cache name
+const urlsToCache = [
+  './', // This caches the index.html file at the root.
+  './index.html' // Explicitly cache index.html
 ];
 
-self.addEventListener('install', (event) => {
+// Install event: opens a cache and adds the core files to it.
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS))
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => response || fetch(event.request))
-  );
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil(
-    clients.matchAll({type: 'window'})
-      .then((clientList) => {
-        if (clientList.length > 0) {
-          return clientList[0].focus();
-        }
-        return clients.openWindow('/');
+      .then(cache => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
+});
+
+// Activate event: cleans up old caches.
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            console.log('Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  return self.clients.claim();
+});
+
+// Fetch event: serves cached content when offline.
+self.addEventListener('fetch', event => {
+  // We only want to cache GET requests.
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+        // Not in cache - fetch from network
+        return fetch(event.request);
+      }
+    )
+  );
+});
+
+// Listen for notification clicks
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+            if (clientList.length > 0) {
+                let client = clientList[0];
+                for (let i = 0; i < clientList.length; i++) {
+                    if (clientList[i].focused) client = clientList[i];
+                }
+                return client.focus();
+            }
+            return clients.openWindow('/');
+        })
+    );
 });
